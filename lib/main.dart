@@ -124,7 +124,6 @@ class _CalculatorPageState extends State<CalculatorPage> {
             ),
             const SizedBox(height: 32),
             Text(CalculatorConstants.helperText),
-
             // Button Grid
             Expanded(
               child: Padding(
