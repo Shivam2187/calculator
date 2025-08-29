@@ -59,10 +59,6 @@ class _CalculatorPageState extends State<CalculatorPage> {
         _errorText = null;
       });
     } on FormatException catch (e) {
-      setState(() {
-        _resultText = null;
-        _errorText = e.message;
-      });
       ScaffoldMessenger.of(context)
         ..clearSnackBars()
         ..showSnackBar(
@@ -72,6 +68,11 @@ class _CalculatorPageState extends State<CalculatorPage> {
             backgroundColor: Colors.red,
           ),
         );
+      integerLimitCheck();
+      setState(() {
+        _resultText = null;
+        _errorText = e.message;
+      });
     } catch (e) {
       setState(() {
         _resultText = null;
@@ -93,17 +94,6 @@ class _CalculatorPageState extends State<CalculatorPage> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final buttons = CalculatorConstants.buttons;
-    if (_resultText != null && _resultText!.length > 19) {
-      ScaffoldMessenger.of(context)
-        ..clearSnackBars()
-        ..showSnackBar(
-          SnackBar(
-            key: UniqueKey(),
-            content: Text('Enter Text Limit Exceed'),
-            backgroundColor: Colors.red,
-          ),
-        );
-    }
 
     return Scaffold(
       appBar: AppBar(
@@ -133,6 +123,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
+              onChanged: (value) => integerLimitCheck,
             ),
             const SizedBox(height: 16),
             Container(
@@ -143,13 +134,13 @@ class _CalculatorPageState extends State<CalculatorPage> {
               child: Text(
                 _resultText == null ? '' : '=$_resultText',
                 style: const TextStyle(
-                  fontSize: 40,
+                  fontSize: 32,
                   fontWeight: FontWeight.bold,
                 ),
               ),
             ),
             const SizedBox(height: 32),
-            Text('Enter numbers separated by comma or newline!'),
+            Text('Enter numbers separated by comma or newline to ADD!'),
 
             // Button Grid
             Expanded(
@@ -239,5 +230,20 @@ class _CalculatorPageState extends State<CalculatorPage> {
         _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
       }
     });
+  }
+
+  void integerLimitCheck() {
+    if (CalculatorConstants.maxSafeInt <
+        (int.tryParse(_resultText ?? '0') ?? 0)) {
+      ScaffoldMessenger.of(context)
+        ..clearSnackBars()
+        ..showSnackBar(
+          SnackBar(
+            key: UniqueKey(),
+            content: Text('Number is Not in Range'),
+            backgroundColor: Colors.red,
+          ),
+        );
+    }
   }
 }
