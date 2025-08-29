@@ -1,8 +1,8 @@
 import 'package:calculator/presentation/provider/calculator_provider.dart';
+import 'package:calculator/presentation/widgets/calulator_custom_textfield.dart';
+import 'package:calculator/presentation/widgets/custom_eleveted_button.dart';
 import 'package:calculator/utils/constants.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 void main() {
   runApp(const CalculatorApp());
@@ -97,32 +97,15 @@ class _CalculatorPageState extends State<CalculatorPage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Calculator'),
+        title: const Text(CalculatorConstants.calculator),
         backgroundColor: Colors.blue,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            TextField(
+            CalulatorCustomTextfield(
               controller: _controller,
-              style: const TextStyle(fontSize: 18),
-              autofocus: true,
-              maxLines: 3,
-              minLines: 1,
-              decoration: InputDecoration(
-                hintText: r'Examples: 1,2,3  or  //;\n1;2  or  1\n2,3',
-                filled: true,
-                fillColor: Colors.white,
-                contentPadding: const EdgeInsets.symmetric(
-                  vertical: 14,
-                  horizontal: 12,
-                ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
               onChanged: (value) => integerLimitCheck,
             ),
             const SizedBox(height: 16),
@@ -140,7 +123,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
               ),
             ),
             const SizedBox(height: 32),
-            Text('Enter numbers separated by comma or newline to ADD!'),
+            Text(CalculatorConstants.helperText),
 
             // Button Grid
             Expanded(
@@ -160,18 +143,8 @@ class _CalculatorPageState extends State<CalculatorPage> {
                     final text = buttons[index];
                     final isAction = ["AC", "DEL", ",", "\\n"].contains(text);
 
-                    return ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: isAction
-                            ? Colors.grey.shade300
-                            : Colors.indigo.shade500,
-                        foregroundColor: isAction ? Colors.black : Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                      ),
+                    return CustomElevetedWidget(
                       onPressed: () {
-                        // FocusManager.instance.primaryFocus?.unfocus();
                         setState(() {
                           if (text == "AC") {
                             _controller.clear();
@@ -184,28 +157,12 @@ class _CalculatorPageState extends State<CalculatorPage> {
                               );
                             }
                           } else {
-                            // final newText =
-                            //     _controller.text +
-                            //     (text == "\\n" ? "\n" : text);
-                            // _controller.value = _controller.value.copyWith(
-                            //   text: newText,
-                            //   selection: TextSelection.collapsed(
-                            //     offset: newText.length,
-                            //   ),
-                            // );
-
                             _appendText(text == "\\n" ? "\n" : text);
                           }
                         });
                       },
-                      child: AutoSizeText(
-                        text,
-                        maxLines: 1,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
+                      buttonText: text,
+                      isAction: isAction,
                     );
                   },
                 ),
@@ -240,7 +197,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
         ..showSnackBar(
           SnackBar(
             key: UniqueKey(),
-            content: Text('Number is Not in Range'),
+            content: Text(CalculatorConstants.numberNotInRange),
             backgroundColor: Colors.red,
           ),
         );

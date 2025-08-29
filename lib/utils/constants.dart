@@ -1,6 +1,9 @@
 class CalculatorConstants {
   static const int maxSafeInt = 9007199254740991;
-  // These are the buttons that will be displayed on the calculator
+
+  static const String helperText='Enter numbers separated by comma or newline to ADD!';
+   static const String calculator = 'Calculator';
+      static const String numberNotInRange = 'Number is Not in Range';
   static const List<String> buttons = [
     '0',
     '1',
