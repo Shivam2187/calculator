@@ -1,3 +1,6 @@
+import 'package:calculator/utils/constants.dart';
+import 'package:flutter/material.dart';
+
 class StringCalculator {
   int add(String numbers) {
     if (numbers.trim().isEmpty) return 0;
@@ -54,5 +57,81 @@ class StringCalculator {
     }
 
     return values.fold<int>(0, (s, e) => s + e);
+  }
+}
+
+class CalculatorProvider extends ChangeNotifier {
+  final TextEditingController controller = TextEditingController();
+  final _calc = StringCalculator();
+
+  String? _resultText;
+  String? _errorText;
+
+  String? get resultText => _resultText;
+  String? get errorText => _errorText;
+
+  void recalculate(BuildContext context) {
+    final input = controller.text;
+
+    try {
+      final sum = _calc.add(input);
+      _resultText = sum.toString();
+      _errorText = null;
+    } on FormatException catch (e) {
+      _resultText = null;
+      _errorText = e.message;
+      _showSnack(context, _errorText!);
+    } catch (e) {
+      _resultText = null;
+      _errorText = e.toString();
+      _showSnack(context, _errorText!);
+    }
+
+    integerLimitCheck(context);
+    notifyListeners();
+  }
+
+  void _showSnack(BuildContext context, String message) {
+    ScaffoldMessenger.of(context)
+      ..clearSnackBars()
+      ..showSnackBar(
+        SnackBar(
+          key: UniqueKey(),
+          content: Text(message),
+          backgroundColor: Colors.red,
+        ),
+      );
+  }
+
+  void appendText(BuildContext context, String value) {
+    final newText = controller.text + value;
+    controller.value = controller.value.copyWith(
+      text: newText,
+      selection: TextSelection.collapsed(offset: newText.length),
+    );
+    recalculate(context);
+  }
+
+  void clear() {
+    controller.clear();
+    _resultText = "";
+    notifyListeners();
+  }
+
+  void delete() {
+    if (controller.text.isNotEmpty) {
+      controller.text = controller.text.substring(
+        0,
+        controller.text.length - 1,
+      );
+      notifyListeners();
+    }
+  }
+
+  void integerLimitCheck(BuildContext context) {
+    if (CalculatorConstants.maxSafeInt <
+        (int.tryParse(_resultText ?? '0') ?? 0)) {
+      _showSnack(context, CalculatorConstants.numberNotInRange);
+    }
   }
 }
