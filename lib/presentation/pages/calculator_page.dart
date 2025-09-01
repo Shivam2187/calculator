@@ -24,35 +24,35 @@ class CalculatorPage extends StatelessWidget {
           padding: const EdgeInsets.all(16),
           child: Consumer<CalculatorProvider>(
             builder: (context, provider, _) {
-              return Column(
-                children: [
-                  CalulatorCustomTextfield(
-                    controller: provider.controller,
-                    onChanged: (_) => provider.recalculate(context),
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    alignment: Alignment.centerRight,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 24,
+              return SingleChildScrollView(
+                child: Column(
+                  children: [
+                    CalulatorCustomTextfield(
+                      controller: provider.controller,
+                      onChanged: (_) => provider.recalculate(context),
                     ),
-                    width: double.infinity,
-                    color: Colors.white,
-                    child: Text(
-                      provider.resultText == null
-                          ? ''
-                          : '=${provider.resultText}',
-                      style: const TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
+                    const SizedBox(height: 16),
+                    Container(
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 24,
+                      ),
+                      width: double.infinity,
+                      color: Colors.white,
+                      child: Text(
+                        provider.resultText == null
+                            ? ''
+                            : '=${provider.resultText}',
+                        style: const TextStyle(
+                          fontSize: 32,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
-                  ),
-                  const SizedBox(height: 32),
-                  const Text(CalculatorConstants.helperText),
-                  Expanded(
-                    child: Padding(
+                    const SizedBox(height: 32),
+                    const Text(CalculatorConstants.helperText),
+                    Padding(
                       padding: const EdgeInsets.all(12),
                       child: GridView.builder(
                         itemCount: buttons.length,
@@ -95,8 +95,8 @@ class CalculatorPage extends StatelessWidget {
                         },
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               );
             },
           ),
