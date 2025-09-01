@@ -50,7 +50,7 @@ class CalculatorPage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  Text(CalculatorConstants.helperText),
+                  const Text(CalculatorConstants.helperText),
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(12),
@@ -67,24 +67,27 @@ class CalculatorPage extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final text = buttons[index];
                           final isAction = [
-                            "AC",
-                            "DEL",
-                            ",",
-                            "\\n",
+                            CalculatorConstants.actionClear,
+                            CalculatorConstants.actionDelete,
+                            CalculatorConstants.actionComma,
+                            CalculatorConstants.actionNewLine,
                           ].contains(text);
 
                           return CustomElevetedWidget(
                             buttonText: text,
                             isAction: isAction,
                             onPressed: () {
-                              if (text == "AC") {
+                              if (text == CalculatorConstants.actionClear) {
                                 provider.clear();
-                              } else if (text == "DEL") {
+                              } else if (text ==
+                                  CalculatorConstants.actionDelete) {
                                 provider.delete();
                               } else {
                                 provider.appendText(
                                   context,
-                                  text == "\\n" ? "\n" : text,
+                                  text == CalculatorConstants.actionNewLine
+                                      ? "\n"
+                                      : text,
                                 );
                               }
                             },

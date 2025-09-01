@@ -1,3 +1,4 @@
+import 'package:calculator/utils/constants.dart';
 import 'package:flutter/material.dart';
 
 class CalulatorCustomTextfield extends StatelessWidget {
@@ -14,7 +15,7 @@ class CalulatorCustomTextfield extends StatelessWidget {
       maxLines: 4,
       minLines: 2,
       decoration: InputDecoration(
-        hintText: r'Examples: 1,2,3  or  //;\n1;2  or  1\n2,3',
+        hintText: CalculatorConstants.hintText,
         filled: true,
         fillColor: Colors.white,
         contentPadding: const EdgeInsets.symmetric(
